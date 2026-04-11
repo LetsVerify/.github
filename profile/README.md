@@ -1,5 +1,7 @@
 # Overview
 
+The current draft scheme -> [Here](https://github.com/LetsVerify/.github/blob/main/doc/bbs_scheme_v2.md)
+
 This start-up project is aiming to provide a robust, privacy-preserving Decentralized Identity (DID) system. The core workflow, encompassing off-chain signing and on-chain verification, is illustrated below:
 
 ```mermaid
