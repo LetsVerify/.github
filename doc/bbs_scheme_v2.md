@@ -71,17 +71,23 @@ Message coding definition：
 + ***Signer***
   + Check whether the user's info corresponds to the constraints in $\vec{\mathbb{m}}$. If not, refuse to sign.
   + Compute 1st commitment:
-    $$
-    \mathcal{C}_1 = G_1 + \sum_{i=0}^{4} m_i \cdot H_i \in \mathbb{G}_1
-    $$
+
+  $$
+  \mathcal{C}_1 = G_1 + \sum_{i=0}^{4} m_i \cdot H_i \in \mathbb{G}_1
+  $$
+
   + Generate 1st signature $\sigma' = (A_1, e)$ where:
-    $$
-    e \xleftarrow{\$} \mathbb{Z}_p, \quad A = \frac{1}{x + e} \cdot \mathcal{C}_1
-    $$ 
+
+  $$
+  e \xleftarrow{\$} \mathbb{Z}_p, \quad A = \frac{1}{x + e} \cdot \mathcal{C}_1
+  $$ 
+
   + Use same $e$ to generate 2nd signature $\sigma' = (A_2', e)$ where:
-    $$
-    A' = \frac{1}{x + e} \cdot \mathcal{C}_2
-    $$
+
+  $$
+  A' = \frac{1}{x + e} \cdot \mathcal{C}_2
+  $$
+
   + Send signature $\sigma' = (A_1, A_2', e)$ back to User.
 
 > [!NOTE]
@@ -100,39 +106,39 @@ Message coding definition：
 + ***User***
   + Unnlind the $A_2'$:
   
-    $$
-    A_2 = A_2' \cdot \lambda^{-1} = \frac{m_{\text{null}} \cdot H_{\text{null}} + m_{\gamma} \cdot H_{\gamma}}{x+e}
-    $$
+  $$
+  A_2 = A_2' \cdot \lambda^{-1} = \frac{m_{\text{null}} \cdot H_{\tex{null}} + m_{\gamma} \cdot H_{\gamma}}{x+e}
+  $$
 
   + Reconstruct the signature $\sigma = (A, e)$:
   
   $$
-    \sigma = (A, e) = (A_1+A_2, e)
+  \sigma = (A, e) = (A_1+A_2, e)
   $$
   
   + Generate **NIZK proof** $\pi$ to prove knowledge of a valid signature $\sigma$ for messages $(\vec{\mathbb{m}}, m_{\gamma}, m_{\text{null}})$ while hiding $(m_{\gamma}, A, e)$.
   
-    $$
-    \pi = \left( \overline{A},\ \overline{B},\ U,\ s,\ t,\ u_{\gamma} \right)
-    $$
+  $$
+  \pi = \left( \overline{A},\ \overline{B},\ U,\ s,\ t,\ u_{\gamma} \right)
+  $$
 
-    Let $J = \{0, 1, 2, 3, 4, \text{null}\}$ (public message indices), while $I = \{\gamma\}$ is the hidden message.
-    
-    $$
-    \begin{aligned}
-      \mathcal{C} & = \mathcal{C}_J + \mathcal{C}_I \\
-      & = G_1 + \sum_{l \in \{1,2,3,4,\cdots\}} m_l \cdot H_l + m_{\text{null}} \cdot H_{\text{null}} + m_{\gamma} \cdot H_{\gamma} 
-    \end{aligned}
-    $$ 
+  Let $J = \{0, 1, 2, 3, 4, \text{null}\}$ (public message indices), while $I = \{\gamma\}$ is the hidden message.
+  
+  $$
+  \begin{aligned}
+    \mathcal{C} & = \mathcal{C}_J + \mathcal{C}_I \\
+    & = G_1 + \sum_{l \in \{1,2,3,4,\cdots\}} m_l \cdot H_l + m_{\text{null}} \cdot H_{\text{null}} + m_{\gamma} \cdot H_{\gamma} 
+  \end{aligned}
+  $$ 
 
-    where:
-    - $\overline{A} = r \cdot A$ (randomized signature point)
-    - $\overline{B} = r \cdot \mathcal{C} - r \cdot e \cdot A$
-    - $\mathcal{C}_J =G_1 + \sum_{j \in J} m_j \cdot H_j$
-    - $U = \alpha \cdot C_J + \beta \cdot \overline{A} + \delta_{\gamma} \cdot H_{\gamma}$ 
-    - $c = H(\mathsf{ctx} || \vec{m}_J || \overline{A} || \overline{B} || U)$ (FS transform)
-    - $s = \alpha + r \cdot c$, $t = \beta - e \cdot c$ (responses for $r, e$)
-    - $u_{\gamma} = \delta_{\gamma} + r \cdot m_{\gamma} \cdot c$
+  where:
+  - $\overline{A} = r \cdot A$ (randomized signature point)
+  - $\overline{B} = r \cdot \mathcal{C} - r \cdot e \cdot A$
+  - $\mathcal{C}_J =G_1 + \sum_{j \in J} m_j \cdot H_j$
+  - $U = \alpha \cdot C_J + \beta \cdot \overline{A} + \delta_{\gamma}\cdot H_{\gamma}$ 
+  - $c = H(\mathsf{ctx} || \vec{m}_J || \overline{A} || \overline{B} || U)$(FS transform)
+  - $s = \alpha + r \cdot c$, $t = \beta - e \cdot c$ (responses for $r, e$)
+  - $u_{\gamma} = \delta_{\gamma} + r \cdot m_{\gamma} \cdot c$
 
   
   + Send $(\pi, m_{\text{null}}, 0x\text{UserAddr})$ to ***Verifier***.
@@ -150,10 +156,12 @@ Message coding definition：
 
 + ***Verifier*** 
   + Compute public part commitment (pre-computed since constraints are hard-coded):
-    $$
-    \mathcal{C}_J = G_1 + \sum_{j \in J} m_j \cdot H_j
-    $$
-    where $J = \{0, 1, 2, 3, 4, \text{null}\}$ (public message indices).
+
+  $$
+  \mathcal{C}_J = G_1 + \sum_{j \in J} m_j \cdot H_j
+  $$
+
+  where $J = \{0, 1, 2, 3, 4, \text{null}\}$ (public message indices).
   
   + **Verify nullifier pre-commitment**:
     - Compute $\mathcal{N} = \text{Hash}(0x\text{UserAddr} || m_{\text{null}})$
@@ -163,19 +171,22 @@ Message coding definition：
   + **Verify the NIZK proof** $\pi = (\overline{A}, \overline{B}, U, s, t, u_{\gamma})$:
     
     1. Recompute the Fiat-Shamir challenge (note: $m_{\text{null}}$ is included in $\vec{m}_J$ as it's revealed):
-       $$
-       c' = H(\mathsf{ctx} || \vec{m}_J || \overline{A} || \overline{B} || U)
-       $$
-    
+
+    $$
+    c' = H(\mathsf{ctx} || \vec{m}_J || \overline{A} || \overline{B} || U)
+    $$
+
     2. **Pairing check** (verify randomized signature is valid):
-       $$
-       e(\overline{A}, X) \stackrel{?}{=} e(\overline{B}, G_2)
-       $$
+
+    $$
+    e(\overline{A}, X) \stackrel{?}{=} e(\overline{B}, G_2)
+    $$
     
     3. **Homomorphic check** (verify correct representation of $\overline{B}$ with hidden $m_{\gamma}$):
-       $$
-       U + c' \cdot \overline{B} \stackrel{?}{=} s \cdot C_J + t \cdot \overline{A} + u_{\gamma} \cdot H_{\gamma}
-       $$
+       
+    $$
+    U + c' \cdot \overline{B} \stackrel{?}{=} s \cdot C_J + t \cdot \overline{A}    + u_{\gamma} \cdot H_{\gamma}
+    $$
     
     If any check fails, revert.
   
