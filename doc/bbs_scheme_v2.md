@@ -20,8 +20,8 @@ Message coding definition：
 | $m_2, H_2$ | Constrain3, ... |
 | $m_3, H_3$ | Constrain4, ... |
 | $m_4, H_4$ | Expiration Height |
-| $m_{\gamma}, H_{\gamma}$ | Blind factor |
 | $m_{\text{null}}, H_{\text{null}}$ | Nullifier commitment |
+| $m_{\gamma}, H_{\gamma}$ | Blind factor |
 
 ## 1. Init
 
@@ -107,7 +107,7 @@ Message coding definition：
   + Unnlind the $A_2'$:
   
   $$
-  A_2 = A_2' \cdot \lambda^{-1} = \frac{m_{\text{null}} \cdot H_{\tex{null}} + m_{\gamma} \cdot H_{\gamma}}{x+e}
+  A_2 = A_2' \cdot \lambda^{-1} = \frac{m_{\text{null}} \cdot H_{\text{null}} + m_{\gamma} \cdot H_{\gamma}}{x+e}
   $$
 
   + Reconstruct the signature $\sigma = (A, e)$:
