@@ -44,9 +44,9 @@ Message coding definition：
   + Use `view` function to read $H_{\text{null}}$ and the requirements $(\vec{\mathbb{m}})$ of DApp on chain.
   
   + Sample $m_{\text{null}}, m_{\gamma}, \lambda \leftarrow \mathbb{Z}_p$, compute:
-    - Nullifier hash: $\mathcal{N} = \text{Hash}(0x\text{UserAddress} \,||\, m_{\text{null}})$
+    - Nullifier hash: $\mathcal{N} = \text{Hash}(0x\text{UserAddress} || m_{\text{null}})$
     - Nullifier commitment: $\mathcal{N}' = m_{\text{null}} \cdot H_{\text{null}} + m_{\gamma} \cdot H_{\gamma}$
-    - Bind the commit: $\mathcal{C}_2$ = $\lambda \cdot (m_{\text{null}} H_{\text{null}} + m_{\gamma} H_{\gamma})$
+    - Bind the commit: $\mathcal{C}_2 = \lambda \cdot (m_{\text{null}} H_{\text{null}} + m_{\gamma} H_{\gamma})$
   
   + Send $\mathcal{N}$ to *Verifier* Contract to stash it on chain (`KeyExist[mapping(uint=>bool)][N]] = true`) by using a new address $0x\text{RelayerAddr}$.
   
@@ -99,13 +99,17 @@ Message coding definition：
 
 + ***User***
   + Unnlind the $A_2'$:
+  
     $$
     A_2 = A_2' \cdot \lambda^{-1} = \frac{m_{\text{null}} \cdot H_{\text{null}} + m_{\gamma} \cdot H_{\gamma}}{x+e}
     $$
+
   + Reconstruct the signature $\sigma = (A, e)$:
+  
   $$
     \sigma = (A, e) = (A_1+A_2, e)
   $$
+  
   + Generate **NIZK proof** $\pi$ to prove knowledge of a valid signature $\sigma$ for messages $(\vec{\mathbb{m}}, m_{\gamma}, m_{\text{null}})$ while hiding $(m_{\gamma}, A, e)$.
   
     $$
@@ -126,7 +130,7 @@ Message coding definition：
     - $\overline{B} = r \cdot \mathcal{C} - r \cdot e \cdot A$
     - $\mathcal{C}_J =G_1 + \sum_{j \in J} m_j \cdot H_j$
     - $U = \alpha \cdot C_J + \beta \cdot \overline{A} + \delta_{\gamma} \cdot H_{\gamma}$ 
-    - $c = H(\mathsf{ctx} \,||\, \vec{m}_J \,||\, \overline{A} \,||\, \overline{B} \,||\, U)$ (FS transform)
+    - $c = H(\mathsf{ctx} || \vec{m}_J || \overline{A} || \overline{B} || U)$ (FS transform)
     - $s = \alpha + r \cdot c$, $t = \beta - e \cdot c$ (responses for $r, e$)
     - $u_{\gamma} = \delta_{\gamma} + r \cdot m_{\gamma} \cdot c$
 
@@ -152,7 +156,7 @@ Message coding definition：
     where $J = \{0, 1, 2, 3, 4, \text{null}\}$ (public message indices).
   
   + **Verify nullifier pre-commitment**:
-    - Compute $\mathcal{N} = \text{Hash}(0x\text{UserAddr} \,||\, m_{\text{null}})$
+    - Compute $\mathcal{N} = \text{Hash}(0x\text{UserAddr} || m_{\text{null}})$
     - Require `KeyExist[N] == true` (check pre-committed in Step 2)
     - Require `Used[N] == false` (prevent double-spending)
   
@@ -160,7 +164,7 @@ Message coding definition：
     
     1. Recompute the Fiat-Shamir challenge (note: $m_{\text{null}}$ is included in $\vec{m}_J$ as it's revealed):
        $$
-       c' = H(\mathsf{ctx} \,||\, \vec{m}_J \,||\, \overline{A} \,||\, \overline{B} \,||\, U)
+       c' = H(\mathsf{ctx} || \vec{m}_J || \overline{A} || \overline{B} || U)
        $$
     
     2. **Pairing check** (verify randomized signature is valid):
@@ -189,7 +193,7 @@ Message coding definition：
   - The NIZK proof is randomized ($\overline{A} = r \cdot A$ with fresh $r$ each time)
   - The Signer only sees $\mathcal{N}' = m_{\text{null}} H_{\text{null}} + m_{\gamma}H_{\gamma}$, even though $m_{\text{null}}, 0x\text{UserAddr}$ is revealed at spend time and holds the realtion of $(m_{\text{null}}, H_{\text{null}}, H_{\gamma})$ simutanuesly, the ***Signer*** should iterate every possible $m_{\gamma}$ and $\lambda$ to track the ***User***.
 - [x] **Single-use**: The ***User*** cannot use the same signature multiple times because:
-  - $\mathcal{N} = \text{Hash}(0x\text{UserAddr} \,||\, m_{\text{null}})$ is pre-committed before signing
+  - $\mathcal{N} = \text{Hash}(0x\text{UserAddr} || m_{\text{null}})$ is pre-committed before signing
   - Verifier checks and marks $\mathcal{N}$ as used atomically
 - [x] **Privacy**: 
   - $m_{\gamma}$ (blind factor) is hidden via zero-knowledge in the proof
