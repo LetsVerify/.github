@@ -43,7 +43,7 @@ Message coding definition：
 - ***User***
   + Use `view` function to read $H_{\text{null}}$ and the requirements $(\vec{\mathbb{m}})$ of DApp on chain.
   
-  + Sample $m_{\text{null}}, m_{\gamma}, \lambda \xleftarrow{\$} \mathbb{Z}_p$, compute:
+  + Sample $m_{\text{null}}, m_{\gamma}, \lambda \leftarrow \mathbb{Z}_p$, compute:
     - Nullifier hash: $\mathcal{N} = \text{Hash}(0x\text{UserAddress} \,||\, m_{\text{null}})$
     - Nullifier commitment: $\mathcal{N}' = m_{\text{null}} \cdot H_{\text{null}} + m_{\gamma} \cdot H_{\gamma}$
     - Bind the commit: $\mathcal{C}_2$ = $\lambda \cdot (m_{\text{null}} H_{\text{null}} + m_{\gamma} H_{\gamma})$
