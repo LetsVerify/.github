@@ -1,10 +1,10 @@
 # Overview
 
-See more detail [here](../doc/BBS-DID.pdf)
+See more details of our work [ia.cr/2026/920](https://ia.cr/2026/920)
 
 ![System Arch](system-architecture-new.png)
 
-## Details
+## More
 
 - The rust implementation of out scheme, see [here](https://github.com/letsverify/crypto).
-- The contract reference implementation, see [here](https://github.com/letsverify/demo_v2)
+- The contract reference implementation, see [here](https://github.com/letsverify/demo_v2).
