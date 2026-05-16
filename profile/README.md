@@ -1,6 +1,7 @@
 # Overview
 
-See more details of our work [ia.cr/2026/920](https://ia.cr/2026/920)
++ **A demo has been deployed at [here](letsverify.klizz.top) to give you a better understanding of our project**
++ See more details of our work [ia.cr/2026/920](https://ia.cr/2026/920)
 
 ![System Arch](system-architecture-new.png)
 
